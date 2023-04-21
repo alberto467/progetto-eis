@@ -1,3 +1,13 @@
 {
-  "java.configuration.updateBuildConfiguration": "interactive"
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cSpell.words": ["Dotenv", "Gson", "unipd"],
+  "cSpell.language": "en,it",
+  "cSpell.ignorePaths": [
+    "target",
+    ".git/objects",
+    ".vscode",
+    ".github",
+    ".devcontainer"
+  ]
 }

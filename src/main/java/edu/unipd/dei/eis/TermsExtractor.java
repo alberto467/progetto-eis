@@ -18,15 +18,17 @@ public class TermsExtractor {
 
   TermsExtractor() {
     Properties props = new Properties();
-    props.setProperty("annotators", "tokenize, cleanxml, ssplit, pos, lemma, stopword");
+    props.setProperty("annotators", "tokenize, cleanxml, ssplit, truecase, pos, lemma, stopword");
     props.setProperty("tokenize.options", "americanize=false");
     props.setProperty("customAnnotatorClass.stopword",
         "edu.unipd.dei.eis.StopWordAnnotator");
     props.setProperty("ssplit.isOneSentence", "true");
 
     // Truecase requires loading a model without maven
-    // props.setProperty("truecase.overwriteText", "true");
-    // props.setProperty("truecase.verbose", "true");
+    props.setProperty("truecase.overwriteText", "true");
+    props.setProperty("truecase.verbose", "true");
+    props.setProperty("truecase.model",
+        "edu/stanford/nlp/models/truecase/truecasing.fast.caseless.qn.ser.gz");
 
     pipeline = new StanfordCoreNLP(props);
   }

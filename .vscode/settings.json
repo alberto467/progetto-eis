@@ -1,7 +1,7 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "java.compile.nullAnalysis.mode": "automatic",
-  "cSpell.words": ["Dotenv", "Gson", "unipd"],
+  "cSpell.words": ["Dotenv", "Gson", "stopword", "truecase", "unipd"],
   "cSpell.language": "en,it",
   "cSpell.ignorePaths": [
     "target",
@@ -9,5 +9,6 @@
     ".vscode",
     ".github",
     ".devcontainer"
-  ]
+  ],
+  "java.checkstyle.configuration": "checkstyle.xml"
 }

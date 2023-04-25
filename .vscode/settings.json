@@ -1,7 +1,16 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
   "java.compile.nullAnalysis.mode": "automatic",
-  "cSpell.words": ["Dotenv", "Gson", "stopword", "truecase", "unipd"],
+  "cSpell.words": [
+    "cleanxml",
+    "Dotenv",
+    "Gson",
+    "ssplit",
+    "stopword",
+    "stopwords",
+    "truecase",
+    "unipd"
+  ],
   "cSpell.language": "en,it",
   "cSpell.ignorePaths": [
     "target",
@@ -10,5 +19,8 @@
     ".github",
     ".devcontainer"
   ],
-  "java.checkstyle.configuration": "checkstyle.xml"
+  "java.checkstyle.configuration": "checkstyle.xml",
+  "[java]": {
+    "editor.indentSize": 4
+  }
 }

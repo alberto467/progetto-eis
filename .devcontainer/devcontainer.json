@@ -18,11 +18,12 @@
     "vscode": {
       "settings": {},
       "extensions": [
-        "vscjava.vscode-java-pack",
-        "streetsidesoftware.code-spell-checker",
-        "streetsidesoftware.code-spell-checker-italian",
-        "shengchen.vscode-checkstyle"
-      ]
+		"vscjava.vscode-java-pack",
+		"streetsidesoftware.code-spell-checker",
+		"streetsidesoftware.code-spell-checker-italian",
+		"shengchen.vscode-checkstyle",
+		"redhat.java"
+	]
     }
   },
 

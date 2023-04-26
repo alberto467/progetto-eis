@@ -12,11 +12,19 @@ import com.google.gson.Gson;
 import edu.unipd.dei.eis.Article;
 import edu.unipd.dei.eis.URIBuilder;
 
+/**
+ * Classe che si occupa di fornire gli articoli tramite l'API del Guardian
+ */
 public class GuardianAPI implements ArticleSource {
     private URIBuilder uriBuilder;
     private int timeout = 2000;
     private Gson g = new Gson();
 
+    /**
+     * Costruttore
+     * 
+     * @param apiKey La chiave per l'API del Guardian
+     */
     public GuardianAPI(String apiKey) {
         uriBuilder = new URIBuilder(URI.create("http://content.guardianapis.com/"))
                 .setParam("api-key", apiKey);
@@ -45,15 +53,24 @@ public class GuardianAPI implements ArticleSource {
         public _response response;
     }
 
+    /**
+     * Classe che contiene le opzioni per il metodo getArticles
+     */
     static public class GetArticlesOptions {
         private String[] showFields;
         private Integer limit = 10;
 
+        /**
+         * Imposta i campi da ottenere
+         */
         public GetArticlesOptions setShowFields(String[] showFields) {
             this.showFields = showFields;
             return this;
         }
 
+        /**
+         * Imposta il numero massimo di articoli da ottenere
+         */
         public GetArticlesOptions setLimit(Integer limit) {
             this.limit = limit;
             return this;
@@ -89,6 +106,13 @@ public class GuardianAPI implements ArticleSource {
         return res;
     }
 
+    /**
+     * Ottiene un numero di articoli gestendo la
+     * 
+     * @param options Le opzioni per la richiesta
+     * 
+     * @return La lista di articoli
+     */
     public ArrayList<Article> getArticles(GetArticlesOptions options)
             throws InterruptedException, IOException, InvalidParameterException {
         if (options.limit == null || options.limit < 1)
@@ -118,6 +142,13 @@ public class GuardianAPI implements ArticleSource {
         return out;
     }
 
+    /**
+     * Ottiene un numero di articoli usando opzioni di default e gestendo la paginazione
+     * 
+     * @param num Il numero di articoli da ottenere
+     * 
+     * @return La lista di articoli
+     */
     public ArrayList<Article> getArticles(int num)
             throws InterruptedException, IOException, InvalidParameterException {
         return getArticles(

@@ -8,13 +8,16 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.CoreDocument;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
-/*
+/**
  * Questa classe si occupa di processare il testo di un articolo per estrarre i termini e il
  * relativo numero di occorrenze.
  */
 public class TermsExtractor {
     StanfordCoreNLP pipeline;
 
+    /**
+     * Costruttore vuoto
+     */
     public TermsExtractor() {
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, cleanxml, ssplit, pos, lemma, stopword");
@@ -74,6 +77,13 @@ public class TermsExtractor {
         return true;
     }
 
+    /**
+     * Estrae i termini da un articolo
+     * 
+     * @param article L'articolo da cui estrarre i termini
+     * 
+     * @return Un insieme di termini
+     */
     public Set<String> extractTerms(Article article) {
         // text = text.toLowerCase();
         CoreDocument document = pipeline.processToCoreDocument(article.title + '\n' + article.body);

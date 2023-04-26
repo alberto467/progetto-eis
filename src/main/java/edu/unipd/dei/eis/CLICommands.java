@@ -11,8 +11,13 @@ import edu.unipd.dei.eis.TermsStore.FileTermsStore;
 import java.sql.Timestamp;
 import java.time.Instant;
 
-
+/**
+ * Classe che contiene i comandi da eseguire da linea di comando
+ */
 public class CLICommands implements BaseCLICommands {
+    /**
+     * Stampa l'help
+     */
     public void help() {
         System.out.println("Use one of the following commands:");
         System.out.println("  help");
@@ -21,6 +26,10 @@ public class CLICommands implements BaseCLICommands {
         System.out.println("  downloadExtract");
     }
 
+
+    /**
+     * Scarica gli articoli
+     */
     public void download() throws Exception {
         System.out.println("Downloading...");
 
@@ -40,6 +49,9 @@ public class CLICommands implements BaseCLICommands {
         System.out.println("Download complete!");
     }
 
+    /**
+     * Estrae i termini
+     */
     public void extract() throws Exception {
         System.out.println("Extracting...");
         FileTermsStore termsStore = new FileTermsStore("tmp/terms");
@@ -57,6 +69,9 @@ public class CLICommands implements BaseCLICommands {
         System.out.println("Extraction complete!");
     }
 
+    /**
+     * Scarica gli articoli e successivamente estrae i termini
+     */
     public void downloadExtract() throws Exception {
         download();
         extract();

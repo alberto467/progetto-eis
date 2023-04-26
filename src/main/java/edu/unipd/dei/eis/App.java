@@ -2,13 +2,14 @@ package edu.unipd.dei.eis;
 
 import edu.unipd.dei.eis.CLIParser.CLIParser;
 
-// Scrivere serializzazione da oggetto a file
-
+/**
+ * Classe principale
+ */
 public final class App {
     private App() {}
 
     /**
-     * Says hello to the world.
+     * Funzione principale
      * 
      * @param args The arguments of the program.
      */

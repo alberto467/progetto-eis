@@ -38,11 +38,13 @@ public class StopWordAnnotator implements Annotator, CoreAnnotation<Boolean> {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public Set<Class<? extends CoreAnnotation>> requirementsSatisfied() {
         return new HashSet<>(Arrays.asList(StopWordAnnotator.class));
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public Set<Class<? extends CoreAnnotation>> requires() {
         return new HashSet<>(Arrays.asList(CoreAnnotations.TokensAnnotation.class,
                 CoreAnnotations.LemmaAnnotation.class));

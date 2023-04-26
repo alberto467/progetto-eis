@@ -1,10 +1,12 @@
 package edu.unipd.dei.eis.TermsStore;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class MemoryTermsStore implements TermsStore {
-    private Map<String, Integer> terms = new HashMap<String, Integer>();
+public abstract class BaseTermsStore implements TermsStore {
+    protected Map<String, Integer> terms = new HashMap<String, Integer>();
 
     public void registerArticleTerms(Iterable<String> terms) {
         for (String term : terms) {
@@ -21,5 +23,11 @@ public class MemoryTermsStore implements TermsStore {
 
     public void clear() {
         terms.clear();
+    }
+
+    public List<Map.Entry<String, Integer>> getTopTerms(Integer limit) {
+        return terms.entrySet().stream().sorted((a, b) -> a.getKey().compareTo(b.getKey()))
+                .sorted((a, b) -> b.getValue() - a.getValue()).limit(limit)
+                .collect(Collectors.toList());
     }
 }

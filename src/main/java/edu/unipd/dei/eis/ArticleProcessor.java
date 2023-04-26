@@ -1,5 +1,6 @@
 package edu.unipd.dei.eis;
 
+import java.util.List;
 import java.util.Map;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
 
@@ -15,8 +16,12 @@ public class ArticleProcessor {
         return ts.getTerms();
     }
 
-    public void clearTerms() {
+    public void clear() {
         ts.getTerms().clear();
+    }
+
+    public List<Map.Entry<String, Integer>> getTopTerms(Integer limit) {
+        return ts.getTopTerms(limit);
     }
 
     public void process(Iterable<Article> articles) {

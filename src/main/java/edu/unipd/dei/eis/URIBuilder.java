@@ -14,6 +14,7 @@ public class URIBuilder implements Cloneable {
         this.params = new HashMap<>();
     }
 
+    @SuppressWarnings("unchecked")
     public URIBuilder(URIBuilder other) {
         this.baseUri = other.baseUri;
         this.path = other.path;

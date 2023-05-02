@@ -18,19 +18,19 @@
     "vscode": {
       "settings": {},
       "extensions": [
-		"vscjava.vscode-java-pack",
-		"streetsidesoftware.code-spell-checker",
-		"streetsidesoftware.code-spell-checker-italian",
-		"redhat.java",
-		"redhat.vscode-xml",
-		"rianadon.vscode-java-checkstyle"
-	]
+        "vscjava.vscode-java-pack",
+        "streetsidesoftware.code-spell-checker",
+        "streetsidesoftware.code-spell-checker-italian",
+        "redhat.java",
+        "redhat.vscode-xml",
+        "rianadon.vscode-java-checkstyle"
+      ]
     }
-  },
-
-  "remoteEnv": {
-    "MAVEN_OPTS": "-Xmx1G -Xms256m"
   }
+
+  // "remoteEnv": {
+  //   "MAVEN_OPTS": "-Xmx1G -Xms256m"
+  // }
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

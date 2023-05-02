@@ -3,6 +3,7 @@ package edu.unipd.dei.eis.TermsStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class BaseTermsStore implements TermsStore {
@@ -29,5 +30,14 @@ public abstract class BaseTermsStore implements TermsStore {
         return terms.entrySet().stream().sorted((a, b) -> a.getKey().compareTo(b.getKey()))
                 .sorted((a, b) -> b.getValue() - a.getValue()).limit(limit)
                 .collect(Collectors.toList());
+    }
+
+    public void mergeTerms(String targetTerm, Set<String> otherTerms) {
+        int sum = terms.get(targetTerm);
+
+        for (String t : otherTerms)
+            sum += terms.remove(t);
+
+        terms.put(targetTerm, sum);
     }
 }

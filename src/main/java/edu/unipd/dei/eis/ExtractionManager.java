@@ -7,7 +7,7 @@ import edu.unipd.dei.eis.TermsStore.TermsStore;
 /**
  * Classe che si occupa di processare gli articoli
  */
-public class ArticleProcessor {
+public class ExtractionManager {
     private TermsStore ts;
     private TermsExtractor te = new TermsExtractor();
 
@@ -16,7 +16,7 @@ public class ArticleProcessor {
      * 
      * @param ts Un oggetto TermsStore che si occupa di memorizzare i termini
      */
-    public ArticleProcessor(TermsStore ts) {
+    public ExtractionManager(TermsStore ts) {
         this.ts = ts;
     }
 
@@ -57,5 +57,6 @@ public class ArticleProcessor {
             System.out.println(a.title);
             ts.registerArticleTerms(te.extractTerms(a));
         }
+        new TrueCaseHeuristic(ts).processCase();
     }
 }

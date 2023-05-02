@@ -55,7 +55,7 @@ public class CLICommands implements BaseCLICommands {
     public void extract() throws Exception {
         System.out.println("Extracting...");
         FileTermsStore termsStore = new FileTermsStore("tmp/terms");
-        ArticleProcessor ap = new ArticleProcessor(termsStore);
+        ExtractionManager ap = new ExtractionManager(termsStore);
         ArticleStorage fileStorage = new ArticleSerializer("tmp/articles");
 
         // Iterable<Article> articles = downloadArticles();

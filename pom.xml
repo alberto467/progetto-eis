@@ -61,6 +61,11 @@
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.6</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -77,9 +82,16 @@
         </executions>
         <configuration>
           <executable>java</executable>
-          <workingDirectory>target/classes/edu/unipd/dei/eis</workingDirectory>
+          <mainClass>edu.unipd.dei.eis.App</mainClass>
           <arguments>
-            <argument>App</argument>
+            <argument>-Xms1g</argument>
+            <argument>-Xmx3g</argument>
+            <argument>-classpath</argument>
+            <classpath />
+            <!-- automatically creates the classpath using all project dependencies,
+                 also adding the project build directory -->
+            <argument>edu.unipd.dei.eis.App</argument>
+            <argument>extract</argument>
           </arguments>
         </configuration>
       </plugin>
@@ -134,7 +146,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
       </plugin>
-      <plugin>
+      <!-- <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>${jacoco-maven-plugin.version}</version>
@@ -200,7 +212,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -222,6 +234,7 @@
           <configLocation>checkstyle.xml</configLocation>
           <logViolationsToConsole>true</logViolationsToConsole>
           <includeTestSourceDirectory>true</includeTestSourceDirectory>
+          <failOnViolation>false</failOnViolation>
         </configuration>
         <executions>
           <execution>

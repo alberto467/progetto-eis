@@ -2,6 +2,7 @@ package edu.unipd.dei.eis.TermsStore;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TermsStore {
     public void registerArticleTerms(Iterable<String> terms);
@@ -15,4 +16,6 @@ public interface TermsStore {
     public void save(String id) throws Exception;
 
     public void load(String id) throws Exception;
+
+    public void mergeTerms(String targetTerm, Set<String> otherTerms);
 }

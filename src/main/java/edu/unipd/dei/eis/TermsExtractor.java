@@ -25,11 +25,10 @@ public class TermsExtractor {
         props.setProperty("customAnnotatorClass.stopword", "edu.unipd.dei.eis.StopWordAnnotator");
         props.setProperty("ssplit.isOneSentence", "true");
 
-        // // Truecase requires loading a model without maven
-        // props.setProperty("truecase.overwriteText", "true");
-        // props.setProperty("truecase.verbose", "true");
-        // props.setProperty("truecase.model",
-        // "edu/stanford/nlp/models/truecase/truecasing.fast.caseless.qn.ser.gz");
+        // NOTE: CoreNLP's truecase annotator causes consistent crashes, probably on loading the
+        // truecase model due to bugs or memory constraints. A max heap size of 4G was tested with a
+        // very short phrase and still produced consistent crashes. A true-case heuristic will be
+        // used instead, for more info checkout the TrueCaseHeuristic class.
 
         pipeline = new StanfordCoreNLP(props);
     }

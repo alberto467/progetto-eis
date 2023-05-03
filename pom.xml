@@ -76,21 +76,13 @@
         <executions>
           <execution>
             <goals>
-              <goal>exec</goal>
+              <goal>java</goal>
             </goals>
           </execution>
         </executions>
         <configuration>
-          <executable>java</executable>
           <mainClass>edu.unipd.dei.eis.App</mainClass>
           <arguments>
-            <argument>-Xms1g</argument>
-            <argument>-Xmx3g</argument>
-            <argument>-classpath</argument>
-            <classpath />
-            <!-- automatically creates the classpath using all project dependencies,
-                 also adding the project build directory -->
-            <argument>edu.unipd.dei.eis.App</argument>
             <argument>extract</argument>
           </arguments>
         </configuration>
@@ -146,7 +138,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>${maven-surefire-plugin.version}</version>
       </plugin>
-      <!-- <plugin>
+      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>${jacoco-maven-plugin.version}</version>
@@ -212,7 +204,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin> -->
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>

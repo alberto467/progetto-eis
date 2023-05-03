@@ -23,7 +23,7 @@
   "java.checkstyle.configuration": "checkstyle.xml",
   "[java]": {
     "editor.indentSize": 4,
+    "editor.tabSize": 4,
     "editor.detectIndentation": false
-  },
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable"
+  }
 }

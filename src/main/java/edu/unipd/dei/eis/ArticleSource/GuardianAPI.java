@@ -107,7 +107,7 @@ public class GuardianAPI implements ArticleSource {
     }
 
     /**
-     * Ottiene un numero di articoli gestendo la
+     * Ottiene un numero di articoli gestendo la paginazione
      * 
      * @param options Le opzioni per la richiesta
      * 

@@ -1,5 +1,6 @@
 package edu.unipd.dei.eis.ArticleStorage;
 
+import java.io.File;
 import java.util.List;
 import edu.unipd.dei.eis.Article;
 import edu.unipd.dei.eis.JSONFileStore;
@@ -15,7 +16,7 @@ public class ArticleSerializer implements ArticleStorage {
      * 
      * @param dir La directory in cui memorizzare gli articoli
      */
-    public ArticleSerializer(String dir) {
+    public ArticleSerializer(File dir) {
         this.store = new JSONFileStore<>(dir, Article.class);
     }
 

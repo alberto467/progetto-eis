@@ -1,6 +1,7 @@
 package edu.unipd.dei.eis;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ import edu.unipd.dei.eis.TermsStore.TermsStore;
 class TrueCaseHeuristicTest {
     @Test
     void testProcessCase() {
-        TermsStore ts = new FileTermsStore("tmp/test");
+        TermsStore ts = new FileTermsStore(new File("tmp/test"));
 
         ts.registerArticleTerms(Arrays.asList("test", "Ciao", "Mario"));
         ts.registerArticleTerms(Arrays.asList("test", "ciao", "Mario"));

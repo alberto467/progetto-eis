@@ -2,6 +2,8 @@ package edu.unipd.dei.eis;
 
 import java.util.List;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
+import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +30,21 @@ public class ExtractionManager {
      * @param articles La lista di articoli da processare
      */
     public void process(List<Article> articles) {
-        long startTime = System.currentTimeMillis();
-        for (Article a : articles) {
-            ts.registerArticleTerms(te.extractTerms(a));
+        try (ProgressBar pb = new ProgressBarBuilder()
+            .setTaskName("Processing articles")
+            .setInitialMax(articles.size())
+            .setUpdateIntervalMillis(250)
+            .showSpeed()
+            .setUnit(" articles", 1)
+            .build()) {
+            long startTime = System.currentTimeMillis();
+            for (Article a : articles) {
+                ts.registerArticleTerms(te.extractTerms(a));
+                pb.step();
+            }
+            logger.info("Processed {} articles in {} ms", articles.size(),
+                System.currentTimeMillis() - startTime);
         }
-        logger.info("Processed {} articles in {} ms", articles.size(),
-            System.currentTimeMillis() - startTime);
 
         new TrueCaseHeuristic(ts).processCase();
     }

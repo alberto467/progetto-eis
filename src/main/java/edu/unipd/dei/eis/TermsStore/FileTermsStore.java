@@ -1,5 +1,6 @@
 package edu.unipd.dei.eis.TermsStore;
 
+import java.io.File;
 import java.util.Map;
 import com.google.gson.reflect.TypeToken;
 import edu.unipd.dei.eis.JSONFileStore;
@@ -7,7 +8,7 @@ import edu.unipd.dei.eis.JSONFileStore;
 public class FileTermsStore extends BaseTermsStore {
     private final JSONFileStore<Map<String, Integer>> store;
 
-    public FileTermsStore(String dir) {
+    public FileTermsStore(File dir) {
         this.store = new JSONFileStore<>(dir, new TypeToken<Map<String, Integer>>() {}.getType());
     }
 

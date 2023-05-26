@@ -2,6 +2,7 @@ package edu.unipd.dei.eis;
 
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class TopTerms {
         return out;
     }
 
-    public void write(String path) throws Exception {
+    public void write(File path) throws Exception {
         BufferedWriter bw = new BufferedWriter(new FileWriter(path));
 
         getPrintStream().forEachOrdered(s -> {
@@ -37,6 +38,7 @@ public class TopTerms {
     }
 
     public void print() throws Exception {
+        System.out.println("Top terms:");
         getPrintStream().forEachOrdered(System.out::println);
     }
 

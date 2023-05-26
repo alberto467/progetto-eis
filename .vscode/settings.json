@@ -6,6 +6,8 @@
     "cleanxml",
     "Dotenv",
     "Gson",
+    "logback",
+    "nytimes",
     "rawtypes",
     "ssplit",
     "stopword",

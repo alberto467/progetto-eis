@@ -88,7 +88,7 @@ public class TermsExtractor {
      * @return Un insieme di termini
      */
     public Set<String> extractTerms(Article article) {
-        logger.info("Extracting terms from article {}", article.id);
+        logger.trace("Extracting terms from article {}", article.id);
         long startTime = System.currentTimeMillis();
 
         // List<Annotation> sentences = new Document(article.body).sentences().stream()
@@ -130,7 +130,7 @@ public class TermsExtractor {
 
         long elapsedMs = System.currentTimeMillis() - startTime;
         String tokensPerSecond = String.format("%.2f", tokenCount / (elapsedMs / 1000.0));
-        logger.info("Extracted {} terms from article {} of {} tokens chars in {} ms ({} tokens/s)",
+        logger.trace("Extracted {} terms from article {} of {} tokens chars in {} ms ({} tokens/s)",
             terms.size(), article.id, tokenCount, elapsedMs, tokensPerSecond);
 
         return terms;

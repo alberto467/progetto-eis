@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Type;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,32 +21,35 @@ public class JSONFileStore<T> {
     private final Type type;
     private final Path dir;
 
-    private static Path setupDir(String dir) {
-        Path out = Paths.get(System.getProperty("user.dir"), dir);
-        out.toFile().mkdirs();
-        return out;
+    private static Path setupDir(File dir) {
+        if (dir.exists() && !dir.isDirectory()) {
+            throw new IllegalArgumentException("The path " + dir.toPath().toString() +
+                "exists and is not a directory");
+        }
+        dir.mkdirs();
+        return dir.toPath();
     }
 
-    public JSONFileStore(String dir, Type type) {
+    public JSONFileStore(File dir, Type type) {
         this.dir = setupDir(dir);
         this.type = type;
     }
 
-    public JSONFileStore(String dir) {
-        this.dir = setupDir(dir);
-        type = new TypeToken<T>() {}.getClass();
+    public JSONFileStore(File dir) {
+        this(dir, new TypeToken<T>() {}.getClass());
     }
 
-    protected Path getFilePath(String id) {
+    protected File getFile(String id) {
         String slugId = slug.slugify(id);
-        return dir.resolve(slugId + ".json");
+        return dir.resolve(slugId + ".json").toFile();
     }
 
     public void save(String id, T obj) throws Exception {
-        File file = getFilePath(id).toFile();
+        File file = getFile(id);
 
         if (file.exists()) {
-            System.out.println("File " + file + " already exists, skipping");
+            logger.info("File {} of type {} already exists, skipping", file.toPath().toString(),
+                type.getTypeName());
             return;
         }
 
@@ -70,22 +72,22 @@ public class JSONFileStore<T> {
     }
 
     public T load(String id) throws Exception {
-        return load(getFilePath(id).toFile());
+        return load(getFile(id));
     }
 
     public List<T> loadAll() throws Exception {
         return Arrays.stream(dir.toFile().listFiles())
-                .filter(file -> file.getName().endsWith(".json")).map(id -> {
-                    try {
-                        return load(id);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }).collect(Collectors.toList());
+            .filter(file -> file.getName().endsWith(".json")).map(id -> {
+                try {
+                    return load(id);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }).collect(Collectors.toList());
     }
 
     public void delete(String id) throws Exception {
-        File file = getFilePath(id).toFile();
+        File file = getFile(id);
         file.delete();
     }
 }

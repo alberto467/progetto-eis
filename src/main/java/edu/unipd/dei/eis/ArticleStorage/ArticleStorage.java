@@ -18,6 +18,11 @@ public interface ArticleStorage {
     public void storeArticle(Article article) throws Exception;
 
     /**
+     * Esiste un articolo con l'id specificato?
+     */
+    public boolean hasArticle(String id) throws Exception;
+
+    /**
      * Restituisce tutti gli articoli memorizzati
      */
     public List<Article> getAllArticles() throws Exception;

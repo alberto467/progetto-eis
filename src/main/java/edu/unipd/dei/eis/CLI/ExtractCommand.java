@@ -5,7 +5,7 @@ import picocli.CommandLine.Option;
 import edu.unipd.dei.eis.Article;
 import edu.unipd.dei.eis.ExtractionManager;
 import edu.unipd.dei.eis.TopTerms;
-import edu.unipd.dei.eis.ArticleStorage.ArticleSerializer;
+import edu.unipd.dei.eis.ArticleStorage.ArticleFileStore;
 import edu.unipd.dei.eis.ArticleStorage.ArticleStorage;
 import java.util.List;
 import edu.unipd.dei.eis.TermsStore.FileTermsStore;
@@ -51,7 +51,7 @@ public class ExtractCommand extends BaseCommand {
 
         FileTermsStore termsStore = new FileTermsStore(outputTerms);
         ExtractionManager ap = new ExtractionManager(termsStore);
-        ArticleStorage fileStorage = new ArticleSerializer(input);
+        ArticleStorage fileStorage = new ArticleFileStore(input);
 
         // Iterable<Article> articles = downloadArticles();
         List<Article> articles = fileStorage.getAllArticles();

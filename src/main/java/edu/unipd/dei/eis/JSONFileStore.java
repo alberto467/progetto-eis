@@ -47,15 +47,19 @@ public class JSONFileStore<T> {
     public void save(String id, T obj) throws Exception {
         File file = getFile(id);
 
-        if (file.exists()) {
-            logger.info("File {} of type {} already exists, skipping", file.toPath().toString(),
-                type.getTypeName());
-            return;
-        }
+        // if (file.exists()) {
+        // logger.info("File {} of type {} already exists, skipping", file.toPath().toString(),
+        // type.getTypeName());
+        // return;
+        // }
 
         FileWriter fw = new FileWriter(file);
         g.toJson(obj, type, fw);
         fw.close();
+    }
+
+    public boolean has(String id) {
+        return getFile(id).exists();
     }
 
     private T load(File file) throws Exception {

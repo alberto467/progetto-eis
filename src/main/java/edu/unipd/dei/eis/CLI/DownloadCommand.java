@@ -5,7 +5,7 @@ import picocli.CommandLine.Option;
 import edu.unipd.dei.eis.App;
 import edu.unipd.dei.eis.DownloadManager;
 import edu.unipd.dei.eis.ArticleSource.TimesCSV;
-import edu.unipd.dei.eis.ArticleStorage.ArticleSerializer;
+import edu.unipd.dei.eis.ArticleStorage.ArticleFileStore;
 import edu.unipd.dei.eis.ArticleStorage.ArticleStorage;
 import java.io.File;
 
@@ -43,7 +43,7 @@ public class DownloadCommand extends BaseCommand {
             throw new RuntimeException("GUARDIAN_API_KEY environment variable not set");
 
         // ArticleSource source = new GuardianAPI(apiKey);
-        ArticleStorage storage = new ArticleSerializer(output);
+        ArticleStorage storage = new ArticleFileStore(output);
 
         // DownloadManager.download(new GuardianAPI(apiKey), storage, 3);
         DownloadManager.download(new TimesCSV("nytimes_articles_v2.csv"), storage, number);

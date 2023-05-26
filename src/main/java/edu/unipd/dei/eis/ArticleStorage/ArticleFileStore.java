@@ -8,7 +8,7 @@ import edu.unipd.dei.eis.JSONFileStore;
 /**
  * Classe che si occupa di memorizzare gli articoli su file JSON
  */
-public class ArticleSerializer implements ArticleStorage {
+public class ArticleFileStore implements ArticleStorage {
     private final JSONFileStore<Article> store;
 
     /**
@@ -16,7 +16,7 @@ public class ArticleSerializer implements ArticleStorage {
      * 
      * @param dir La directory in cui memorizzare gli articoli
      */
-    public ArticleSerializer(File dir) {
+    public ArticleFileStore(File dir) {
         this.store = new JSONFileStore<>(dir, Article.class);
     }
 
@@ -32,6 +32,13 @@ public class ArticleSerializer implements ArticleStorage {
      */
     public void storeArticle(Article article) throws Exception {
         store.save(article.id, article);
+    }
+
+    /**
+     * Esiste un articolo con l'id specificato?
+     */
+    public boolean hasArticle(String id) throws Exception {
+        return store.has(id);
     }
 
     /**

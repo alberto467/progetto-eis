@@ -15,12 +15,9 @@ public class DownloadManager {
     /**
      * Scarica un numero di articoli
      * 
-     * @param source
-     *        Un oggetto ArticleSource che si occupa di fornire gli articoli
-     * @param storage
-     *        Un oggetto ArticleStorage che si occupa di memorizzare gli articoli
-     * @param num
-     *        Il numero di articoli da scaricare
+     * @param source Un oggetto ArticleSource che si occupa di fornire gli articoli
+     * @param storage Un oggetto ArticleStorage che si occupa di memorizzare gli articoli
+     * @param num Il numero di articoli da scaricare
      * 
      * @return La lista di articoli scaricati
      */
@@ -30,8 +27,14 @@ public class DownloadManager {
 
         List<Article> articles = source.getArticles(num);
 
-        for (Article a : articles)
+        for (Article a : articles) {
+            if (storage.hasArticle(a.id)) {
+                logger.info("Article {} already downloaded", a.id);
+                continue;
+            }
+
             storage.storeArticle(a);
+        }
 
         logger.info("Downloaded {} articles from {}", articles.size(),
             source.getClass().getSimpleName());

@@ -18,7 +18,7 @@ class GuardianAPITest {
         assertDoesNotThrow(() -> {
             List<Article> articles = gApi.getArticles(3);
 
-            assertEquals(articles.size(), 3);
+            assertEquals(3, articles.size());
             assertTrue(articles.get(0).id.length() > 0);
             assertTrue(articles.get(0).title.length() > 0);
             assertTrue(articles.get(0).body.length() > 0);

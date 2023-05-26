@@ -1,10 +1,9 @@
 package edu.unipd.dei.eis;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import edu.unipd.dei.eis.TermsStore.FileTermsStore;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
@@ -14,8 +13,8 @@ class TrueCaseHeuristicTest {
     void testProcessCase() {
         TermsStore ts = new FileTermsStore("tmp/test");
 
-        ts.registerArticleTerms(Stream.of("test", "Ciao", "Mario").collect(Collectors.toList()));
-        ts.registerArticleTerms(Stream.of("test", "ciao", "Mario").collect(Collectors.toList()));
+        ts.registerArticleTerms(Arrays.asList("test", "Ciao", "Mario"));
+        ts.registerArticleTerms(Arrays.asList("test", "ciao", "Mario"));
 
         new TrueCaseHeuristic(ts).processCase();
 
@@ -24,6 +23,6 @@ class TrueCaseHeuristicTest {
         out.put("ciao", 2);
         out.put("Mario", 2);
 
-        assertEquals(ts.getTerms(), out);
+        assertEquals(out, ts.getTerms());
     }
 }

@@ -1,5 +1,6 @@
 {
   "java.configuration.updateBuildConfiguration": "interactive",
+  "java.format.settings.url": "formatting.xml",
   "java.compile.nullAnalysis.mode": "automatic",
   "cSpell.words": [
     "cleanxml",
@@ -9,6 +10,7 @@
     "ssplit",
     "stopword",
     "stopwords",
+    "Treebank",
     "truecase",
     "unipd"
   ],

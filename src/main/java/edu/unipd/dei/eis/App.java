@@ -1,11 +1,15 @@
 package edu.unipd.dei.eis;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import edu.unipd.dei.eis.CLIParser.CLIParser;
 
 /**
  * Classe principale
  */
 public final class App {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+
     private App() {}
 
     /**
@@ -17,9 +21,10 @@ public final class App {
         CLIParser parser = new CLIParser(new CLICommands());
 
         try {
-            parser.parse(args);
+            parser.execute(args);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while executing command", e);
+            System.exit(1);
         }
     }
 }

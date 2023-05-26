@@ -3,7 +3,9 @@ package edu.unipd.dei.eis;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Scanner;
 import java.util.Set;
 import edu.stanford.nlp.ling.CoreAnnotation;
@@ -11,16 +13,31 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.Annotator;
+import edu.stanford.nlp.util.ArraySet;
 
-// This class implements a CoreNLP annotator
+/**
+ * A custom CoreNLP annotator to mark tokens as stop words. It reads the stop words from a file and
+ * matches them against the lemma of the token.
+ * 
+ * @see <a href="https://stanfordnlp.github.io/CoreNLP/new_annotator.html">CoreNLP Custom
+ *      Annotators</a>
+ */
 public class StopWordAnnotator implements Annotator, CoreAnnotation<Boolean> {
     public static final String ANNOTATOR_CLASS = "stopword";
 
     private Set<String> stopWords;
 
-    StopWordAnnotator() throws FileNotFoundException {
+    StopWordAnnotator(String name, Properties props) throws FileNotFoundException {
+        String filename = props.getProperty("stopword.file");
+        if (filename == null)
+            throw new RuntimeException("Missing property stopword.file");
+
+        parseFile(filename);
+    }
+
+    private void parseFile(String filename) throws FileNotFoundException {
         // Read from file
-        File file = new File("stopwords.txt");
+        File file = new File(filename);
         Scanner reader = new Scanner(file);
 
         stopWords = new HashSet<>();
@@ -40,14 +57,14 @@ public class StopWordAnnotator implements Annotator, CoreAnnotation<Boolean> {
     @Override
     @SuppressWarnings("rawtypes")
     public Set<Class<? extends CoreAnnotation>> requirementsSatisfied() {
-        return new HashSet<>(Arrays.asList(StopWordAnnotator.class));
+        return Collections.emptySet();
     }
 
     @Override
     @SuppressWarnings("rawtypes")
     public Set<Class<? extends CoreAnnotation>> requires() {
-        return new HashSet<>(Arrays.asList(CoreAnnotations.TokensAnnotation.class,
-                CoreAnnotations.LemmaAnnotation.class));
+        return Collections.unmodifiableSet(new ArraySet<>(Arrays.asList(
+                CoreAnnotations.TokensAnnotation.class, CoreAnnotations.LemmaAnnotation.class)));
     }
 
     @Override

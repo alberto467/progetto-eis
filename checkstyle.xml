@@ -8,9 +8,11 @@
     </module>
 
     <module name="MissingJavadocMethod">
+      <property name="severity" value="info" />
     </module>
 
     <module name="MissingJavadocType">
+      <property name="severity" value="info" />
     </module>
   </module>
 

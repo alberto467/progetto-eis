@@ -27,7 +27,7 @@ public class ArticleSerializer implements ArticleStorage {
     }
 
     /**
-     *  Memorizza un articolo
+     * Memorizza un articolo
      */
     public void storeArticle(Article article) throws Exception {
         store.save(article.id, article);

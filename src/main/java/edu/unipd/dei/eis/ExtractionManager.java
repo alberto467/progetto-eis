@@ -1,13 +1,15 @@
 package edu.unipd.dei.eis;
 
 import java.util.List;
-import java.util.Map;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Classe che si occupa di processare gli articoli
  */
 public class ExtractionManager {
+    private static final Logger logger = LoggerFactory.getLogger(TermsExtractor.class);
     private TermsStore ts;
     private TermsExtractor te = new TermsExtractor();
 
@@ -21,42 +23,18 @@ public class ExtractionManager {
     }
 
     /**
-     * Restituisce la mappa dei termini
-     * 
-     * @return La mappa dei termini
-     */
-    public Map<String, Integer> getTerms() {
-        return ts.getTerms();
-    }
-
-    /**
-     * Cancella i termini memorizzati
-     */
-    public void clear() {
-        ts.getTerms().clear();
-    }
-
-    /**
-     * Restituisce i termini più frequenti
-     * 
-     * @param limit Il numero massimo di termini da restituire
-     * 
-     * @return I termini più frequenti
-     */
-    public List<Map.Entry<String, Integer>> getTopTerms(Integer limit) {
-        return ts.getTopTerms(limit);
-    }
-
-    /**
      * Processa una lista di articoli
      * 
      * @param articles La lista di articoli da processare
      */
-    public void process(Iterable<Article> articles) {
+    public void process(List<Article> articles) {
+        long startTime = System.currentTimeMillis();
         for (Article a : articles) {
-            System.out.println(a.title);
             ts.registerArticleTerms(te.extractTerms(a));
         }
+        logger.info("Processed {} articles in {} ms", articles.size(),
+            System.currentTimeMillis() - startTime);
+
         new TrueCaseHeuristic(ts).processCase();
     }
 }

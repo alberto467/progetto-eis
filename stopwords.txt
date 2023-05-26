@@ -132,3 +132,7 @@ many
 due
 begin
 end
+mr.
+say
+come
+go

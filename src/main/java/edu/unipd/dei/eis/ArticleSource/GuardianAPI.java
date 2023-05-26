@@ -6,8 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.google.gson.Gson;
 import edu.unipd.dei.eis.Article;
 import edu.unipd.dei.eis.URIBuilder;
@@ -16,6 +17,7 @@ import edu.unipd.dei.eis.URIBuilder;
  * Classe che si occupa di fornire gli articoli tramite l'API del Guardian
  */
 public class GuardianAPI implements ArticleSource {
+    private static final Logger logger = LoggerFactory.getLogger(GuardianAPI.class);
     private URIBuilder uriBuilder;
     private int timeout = 2000;
     private Gson g = new Gson();
@@ -27,7 +29,7 @@ public class GuardianAPI implements ArticleSource {
      */
     public GuardianAPI(String apiKey) {
         uriBuilder = new URIBuilder(URI.create("http://content.guardianapis.com/"))
-                .setParam("api-key", apiKey);
+            .setParam("api-key", apiKey);
     }
 
     static private class SearchResponse {
@@ -37,13 +39,13 @@ public class GuardianAPI implements ArticleSource {
                 public String webTitle;
 
                 static private class Fields {
-                    public String body;
+                    public String bodyText;
                 }
 
                 public Fields fields;
 
                 public Article toArticle() {
-                    return new Article(id, webTitle, fields.body);
+                    return new Article(id, webTitle, fields.bodyText);
                 }
             }
 
@@ -96,7 +98,7 @@ public class GuardianAPI implements ArticleSource {
             conn.disconnect();
 
             throw new IOException(
-                    "HTTP error: status = " + status + ", data = " + errorMessage.toString());
+                "HTTP error: status = " + status + ", data = " + errorMessage.toString());
         }
 
         InputStreamReader reader = new InputStreamReader(conn.getInputStream());
@@ -113,14 +115,13 @@ public class GuardianAPI implements ArticleSource {
      * 
      * @return La lista di articoli
      */
-    public ArrayList<Article> getArticles(GetArticlesOptions options)
-            throws InterruptedException, IOException, InvalidParameterException {
+    public ArrayList<Article> getArticles(GetArticlesOptions options) throws Exception {
         if (options.limit == null || options.limit < 1)
-            throw new InvalidParameterException("limit must be positive and not null");
+            throw new IllegalArgumentException("limit must be positive and not null");
 
         URIBuilder b = uriBuilder.clone().setPath("search")
-                .setParam("show-fields", String.join(",", options.showFields))
-                .setParam("page-size", "50");
+            .setParam("show-fields", String.join(",", options.showFields))
+            .setParam("page-size", "50");
 
         ArrayList<Article> out = new ArrayList<>(options.limit);
 
@@ -149,9 +150,13 @@ public class GuardianAPI implements ArticleSource {
      * 
      * @return La lista di articoli
      */
-    public ArrayList<Article> getArticles(int num)
-            throws InterruptedException, IOException, InvalidParameterException {
-        return getArticles(
-                new GetArticlesOptions().setShowFields(new String[] {"body"}).setLimit(num));
+    public ArrayList<Article> getArticles(int num) throws Exception {
+        try {
+            return getArticles(new GetArticlesOptions().setShowFields(new String[] {"bodyText"})
+                .setLimit(num));
+        } catch (Exception e) {
+            logger.error("Errore nel recupero degli articoli", e);
+            throw e;
+        }
     }
 }

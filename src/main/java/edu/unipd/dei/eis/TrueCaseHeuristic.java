@@ -7,13 +7,16 @@ import java.util.Map;
 import java.util.Set;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
 
-/*
+/**
  * Performs heuristics to try and determine the true case of terms and avoids differently-cased
  * duplicate terms.
  */
 public class TrueCaseHeuristic {
     private TermsStore ts;
 
+    /**
+     * @param ts The terms store to operate on.
+     */
     public TrueCaseHeuristic(TermsStore ts) {
         this.ts = ts;
     }

@@ -12,8 +12,11 @@ import com.google.gson.reflect.TypeToken;
 import com.github.slugify.Slugify;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONFileStore<T> {
+    private static final Logger logger = LoggerFactory.getLogger(JSONFileStore.class);
     private static final Gson g = new Gson();
     private static final Slugify slug = new Slugify();
     private final Type type;
@@ -54,10 +57,15 @@ public class JSONFileStore<T> {
     }
 
     private T load(File file) throws Exception {
-        FileReader r = new FileReader(file);
-        T obj = g.fromJson(r, type);
-        r.close();
-
+        T obj;
+        try {
+            FileReader r = new FileReader(file);
+            obj = g.fromJson(r, type);
+            r.close();
+        } catch (Exception e) {
+            logger.error("Error loading file " + file.toPath().toString(), e);
+            throw e;
+        }
         return obj;
     }
 

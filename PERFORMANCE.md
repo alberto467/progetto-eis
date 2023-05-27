@@ -26,3 +26,6 @@ Case 2:
 2000 articles in about 250s?
 
 1000 articles (nytimes) in 72188ms
+
+---
+1000 articles (nytimes) in 52247ms

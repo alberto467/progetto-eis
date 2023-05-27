@@ -1,14 +1,14 @@
 package edu.unipd.dei.eis.TermsStore;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import edu.unipd.dei.eis.TopTerms;
 
 public abstract class BaseTermsStore implements TermsStore {
-    protected Map<String, Integer> terms = new HashMap<String, Integer>();
+    protected Map<String, Integer> terms = new ConcurrentHashMap<String, Integer>();
 
     public void registerArticleTerms(Iterable<String> terms) {
         for (String term : terms) {

@@ -30,6 +30,10 @@ public class ExtractionManager {
      * @param articles La lista di articoli da processare
      */
     public void process(List<Article> articles) {
+        long startTime = System.currentTimeMillis();
+
+        logger.info("Processing {} articles...", articles.size());
+
         try (ProgressBar pb = new ProgressBarBuilder()
             .setTaskName("Processing articles")
             .setInitialMax(articles.size())
@@ -37,14 +41,16 @@ public class ExtractionManager {
             .showSpeed()
             .setUnit(" articles", 1)
             .build()) {
-            long startTime = System.currentTimeMillis();
-            for (Article a : articles) {
+
+            articles.parallelStream().forEach(a -> {
                 ts.registerArticleTerms(te.extractTerms(a));
                 pb.step();
-            }
-            logger.info("Processed {} articles in {} ms", articles.size(),
-                System.currentTimeMillis() - startTime);
+            });
+
         }
+
+        logger.info("Processed {} articles in {} ms", articles.size(),
+            System.currentTimeMillis() - startTime);
 
         new TrueCaseHeuristic(ts).processCase();
     }

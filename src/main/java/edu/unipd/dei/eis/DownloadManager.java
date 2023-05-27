@@ -27,14 +27,18 @@ public class DownloadManager {
 
         List<Article> articles = source.getArticles(num);
 
-        for (Article a : articles) {
-            if (storage.hasArticle(a.id)) {
-                logger.info("Article {} already downloaded", a.id);
-                continue;
-            }
+        articles.parallelStream().forEach(a -> {
+            try {
+                if (storage.hasArticle(a.id)) {
+                    logger.info("Article {} already downloaded", a.id);
+                }
 
-            storage.storeArticle(a);
-        }
+                storage.storeArticle(a);
+            } catch (Exception e) {
+                logger.error("Error while storing article", e);
+                throw new RuntimeException(e);
+            }
+        });
 
         logger.info("Downloaded {} articles from {}", articles.size(),
             source.getClass().getSimpleName());

@@ -26,9 +26,12 @@ public class DownloadExtractCommand extends BaseCommand {
         description = "The output path for the top terms file")
     private File outputResults;
 
+    @Option(names = {"-t", "--threads"}, description = "Threads used for nlp processing")
+    private Integer threads = null;
+
     @Override
     public void task() throws Exception {
         new DownloadCommand(sources, outputArticles, number).task();
-        new ExtractCommand(outputArticles, outputTerms, outputResults).task();
+        new ExtractCommand(outputArticles, outputTerms, outputResults, threads).task();
     }
 }

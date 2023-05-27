@@ -1,6 +1,7 @@
 package edu.unipd.dei.eis;
 
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
@@ -14,14 +15,16 @@ public class ExtractionManager {
     private static final Logger logger = LoggerFactory.getLogger(TermsExtractor.class);
     private TermsStore ts;
     private TermsExtractor te = new TermsExtractor();
+    private int threads;
 
     /**
      * Costruttore
      * 
      * @param ts Un oggetto TermsStore che si occupa di memorizzare i termini
      */
-    public ExtractionManager(TermsStore ts) {
+    public ExtractionManager(TermsStore ts, int threads) {
         this.ts = ts;
+        this.threads = threads;
     }
 
     /**
@@ -29,7 +32,7 @@ public class ExtractionManager {
      * 
      * @param articles La lista di articoli da processare
      */
-    public void process(List<Article> articles) {
+    public void process(List<Article> articles) throws Exception {
         long startTime = System.currentTimeMillis();
 
         logger.info("Processing {} articles...", articles.size());
@@ -42,11 +45,19 @@ public class ExtractionManager {
             .setUnit(" articles", 1)
             .build()) {
 
-            articles.parallelStream().forEach(a -> {
-                ts.registerArticleTerms(te.extractTerms(a));
-                pb.step();
-            });
-
+            ForkJoinPool pool = new ForkJoinPool(threads);
+            try {
+                pool.submit(() -> articles.parallelStream().forEach(a -> {
+                    ts.registerArticleTerms(te.extractTerms(a));
+                    pb.step();
+                })).get();
+            } finally {
+                pool.shutdown();
+                if (!pool.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
+                    logger.warn("Thread pool did not terminate in time, forcing shutdown");
+                    pool.shutdownNow();
+                }
+            }
         }
 
         logger.info("Processed {} articles in {} ms", articles.size(),

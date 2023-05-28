@@ -12,7 +12,7 @@ import picocli.CommandLine;
  */
 public final class App {
     private static final Logger logger = LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
-    public static final Dotenv env = Dotenv.load();
+    public static final Dotenv env = Dotenv.configure().ignoreIfMissing().load();
 
     private App() {}
 

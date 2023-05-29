@@ -4,19 +4,26 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import edu.unipd.dei.eis.App;
 import edu.unipd.dei.eis.DownloadManager;
-import edu.unipd.dei.eis.ArticleSource.TimesCSV;
+import edu.unipd.dei.eis.ArticleSource.ArticleSource;
 import edu.unipd.dei.eis.ArticleStorage.ArticleFileStore;
 import edu.unipd.dei.eis.ArticleStorage.ArticleStorage;
 import java.io.File;
+import java.util.HashSet;
+import java.util.ServiceLoader;
+import java.util.Set;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * Command to download articles from one or multiple sources.
  */
 @Command(name = "download")
 public class DownloadCommand extends BaseCommand {
+    private static final Logger logger = LoggerFactory.getLogger(DownloadCommand.class);
+
     @Option(names = {"-s", "--sources"}, required = true,
-        defaultValue = "all", description = "The sources to download from")
-    private String[] sources;
+        description = "The sources to download from", split = ",")
+    private String[] sources = {"all"};
 
     @Option(names = {"-o", "--output"}, defaultValue = "tmp/articles",
         description = "The output directory")
@@ -45,7 +52,20 @@ public class DownloadCommand extends BaseCommand {
         // ArticleSource source = new GuardianAPI(apiKey);
         ArticleStorage storage = new ArticleFileStore(output);
 
-        // DownloadManager.download(new GuardianAPI(apiKey), storage, 3);
-        DownloadManager.download(new TimesCSV("nytimes_articles_v2.csv"), storage, number);
+        Set<String> sourcesSet = new HashSet<String>();
+        for (String source : sources)
+            if (!source.isEmpty())
+                sourcesSet.add(source.toLowerCase());
+
+        boolean all = sourcesSet.size() == 0 || sourcesSet.contains("all");
+
+        logger.info("Downloading {} articles from {}", number,
+            all ? "all" : sourcesSet.toString());
+
+        for (ArticleSource Source : ServiceLoader.load(ArticleSource.class)) {
+            logger.info("Discovered source {}", Source.getName());
+            if (all || sourcesSet.contains(Source.getName().toLowerCase()))
+                DownloadManager.download(Source, storage, number);
+        }
     }
 }

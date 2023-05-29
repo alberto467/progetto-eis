@@ -14,4 +14,11 @@ public interface ArticleSource {
      * @return List of articles
      */
     public List<Article> getArticles(int num) throws Exception;
+
+    /**
+     * Returns the name of the source
+     * 
+     * @return Name of the source
+     */
+    public String getName();
 }

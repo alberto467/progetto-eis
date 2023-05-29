@@ -16,7 +16,7 @@ import edu.unipd.dei.eis.URIBuilder;
 /**
  * Classe che si occupa di fornire gli articoli tramite l'API del Guardian
  */
-public class GuardianAPI implements ArticleSource {
+public class GuardianAPI {
     private static final Logger logger = LoggerFactory.getLogger(GuardianAPI.class);
     private URIBuilder uriBuilder;
     private int timeout = 2000;
@@ -55,17 +55,35 @@ public class GuardianAPI implements ArticleSource {
         public _response response;
     }
 
-    /**
-     * Classe che contiene le opzioni per il metodo getArticles
-     */
-    static public class GetArticlesOptions {
-        private String[] showFields;
-        private Integer limit = 10;
+    static public class SearchQuery {
+        public String query;
+        public String[] showFields;
+        public Integer limit;
+
+        public SearchQuery(String query, String[] showFields, Integer limit) {
+            this.query = query;
+            this.showFields = showFields;
+            this.limit = limit;
+        }
+    }
+
+    static public class SearchQueryBuilder {
+        private String query;
+        private String[] showFields = {};
+        private Integer limit = 50;
+
+        /**
+         * Imposta la query
+         */
+        public SearchQueryBuilder setQuery(String query) {
+            this.query = query;
+            return this;
+        }
 
         /**
          * Imposta i campi da ottenere
          */
-        public GetArticlesOptions setShowFields(String[] showFields) {
+        public SearchQueryBuilder setShowFields(String... showFields) {
             this.showFields = showFields;
             return this;
         }
@@ -73,9 +91,19 @@ public class GuardianAPI implements ArticleSource {
         /**
          * Imposta il numero massimo di articoli da ottenere
          */
-        public GetArticlesOptions setLimit(Integer limit) {
+        public SearchQueryBuilder setLimit(Integer limit) {
             this.limit = limit;
             return this;
+        }
+
+        /**
+         * Costruisce la query
+         */
+        public SearchQuery build() {
+            if (query == null)
+                throw new IllegalArgumentException("query must be set");
+
+            return new SearchQuery(query, showFields, limit);
         }
     }
 
@@ -111,21 +139,21 @@ public class GuardianAPI implements ArticleSource {
     /**
      * Ottiene un numero di articoli gestendo la paginazione
      * 
-     * @param options Le opzioni per la richiesta
+     * @param query Le opzioni per la richiesta
      * 
      * @return La lista di articoli
      */
-    public ArrayList<Article> getArticles(GetArticlesOptions options) throws Exception {
-        if (options.limit == null || options.limit < 1)
+    public ArrayList<Article> search(SearchQuery query) throws Exception {
+        if (query.limit == null || query.limit < 1)
             throw new IllegalArgumentException("limit must be positive and not null");
 
         URIBuilder b = uriBuilder.clone().setPath("search")
-            .setParam("show-fields", String.join(",", options.showFields))
+            .setParam("show-fields", String.join(",", query.showFields))
             .setParam("page-size", "50");
 
-        ArrayList<Article> out = new ArrayList<>(options.limit);
+        ArrayList<Article> out = new ArrayList<>(query.limit);
 
-        Integer left = options.limit;
+        Integer left = query.limit;
         Integer page = 1;
         while (left > 0) {
             if (left < 50)
@@ -141,22 +169,5 @@ public class GuardianAPI implements ArticleSource {
         }
 
         return out;
-    }
-
-    /**
-     * Ottiene un numero di articoli usando opzioni di default e gestendo la paginazione
-     * 
-     * @param num Il numero di articoli da ottenere
-     * 
-     * @return La lista di articoli
-     */
-    public ArrayList<Article> getArticles(int num) throws Exception {
-        try {
-            return getArticles(new GetArticlesOptions().setShowFields(new String[] {"bodyText"})
-                .setLimit(num));
-        } catch (Exception e) {
-            logger.error("Errore nel recupero degli articoli", e);
-            throw e;
-        }
     }
 }

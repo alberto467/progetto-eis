@@ -16,7 +16,12 @@ class GuardianAPITest {
         GuardianAPI gApi = new GuardianAPI(apiKey);
 
         assertDoesNotThrow(() -> {
-            List<Article> articles = gApi.getArticles(3);
+            List<Article> articles = gApi.search(
+                new GuardianAPI.SearchQueryBuilder()
+                    .setQuery("cats")
+                    .setShowFields("bodyText")
+                    .setLimit(3)
+                    .build());
 
             assertEquals(3, articles.size());
             assertTrue(articles.get(0).id.length() > 0);

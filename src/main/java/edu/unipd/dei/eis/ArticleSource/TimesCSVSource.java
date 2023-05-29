@@ -13,17 +13,26 @@ import edu.unipd.dei.eis.Article;
 /**
  * Classe che si occupa di fornire gli articoli tramite un file CSV
  */
-public class TimesCSV implements ArticleSource {
-    private static final Logger logger = LoggerFactory.getLogger(TimesCSV.class);
+public class TimesCSVSource implements ArticleSource {
+    private static final Logger logger = LoggerFactory.getLogger(TimesCSVSource.class);
 
     private String path;
 
     /**
      * Costruttore
      * 
+     * Utilizza il file nytimes_articles_v2.csv
+     */
+    public TimesCSVSource() {
+        this("nytimes_articles_v2.csv");
+    }
+
+    /**
+     * Costruttore
+     * 
      * @param path Il percorso del file CSV
      */
-    public TimesCSV(String path) {
+    public TimesCSVSource(String path) {
         this.path = path;
     }
 
@@ -43,8 +52,17 @@ public class TimesCSV implements ArticleSource {
         }
 
         CsvToBean<ArticleBean> reader =
-                new CsvToBeanBuilder<ArticleBean>(fr).withType(ArticleBean.class).build();
+            new CsvToBeanBuilder<ArticleBean>(fr).withType(ArticleBean.class).build();
 
         return reader.stream().limit(num).map(ArticleBean::toArticle).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the name of the source
+     * 
+     * @return Name of the source
+     */
+    public String getName() {
+        return "TimesCSV";
     }
 }

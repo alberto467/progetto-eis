@@ -2,3 +2,4 @@ target
 .env
 tmp
 logs
+dependency-reduced-pom.xml

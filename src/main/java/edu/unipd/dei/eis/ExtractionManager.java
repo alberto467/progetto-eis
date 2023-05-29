@@ -63,6 +63,6 @@ public class ExtractionManager {
         logger.info("Processed {} articles in {} ms", articles.size(),
             System.currentTimeMillis() - startTime);
 
-        new TrueCaseHeuristic(ts).processCase();
+        new TrueCaseHeuristic(ts.getTerms()).processCase();
     }
 }

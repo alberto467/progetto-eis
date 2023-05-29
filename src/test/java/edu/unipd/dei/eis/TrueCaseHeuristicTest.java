@@ -17,7 +17,7 @@ class TrueCaseHeuristicTest {
         ts.registerArticleTerms(Arrays.asList("test", "Ciao", "Mario"));
         ts.registerArticleTerms(Arrays.asList("test", "ciao", "Mario"));
 
-        new TrueCaseHeuristic(ts).processCase();
+        new TrueCaseHeuristic(ts.getTerms()).processCase();
 
         Map<String, Integer> out = new HashMap<>();
         out.put("test", 2);

@@ -4,27 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import edu.unipd.dei.eis.TermsStore.TermsStore;
 
 /**
  * Performs heuristics to try and determine the true case of terms and avoids differently-cased
  * duplicate terms.
  */
 public class TrueCaseHeuristic {
-    private TermsStore ts;
+    private Map<String, Integer> terms;
 
     /**
-     * @param ts The terms store to operate on.
+     * Constructor
      */
-    public TrueCaseHeuristic(TermsStore ts) {
-        this.ts = ts;
+    public TrueCaseHeuristic(Map<String, Integer> terms) {
+        this.terms = terms;
     }
 
     private Map<String, SortedSet<String>> buildCaseMap() {
         // Map of lower-case version of terms to set of all differently-cased versions of the term
         Map<String, SortedSet<String>> caseMap = new HashMap<>();
 
-        for (String t : ts.getTerms().keySet()) {
+        for (String t : terms.keySet()) {
             String lower = t.toLowerCase();
             if (caseMap.containsKey(lower)) {
                 caseMap.get(lower).add(t);
@@ -49,7 +48,12 @@ public class TrueCaseHeuristic {
             String target = v.last();
             v.remove(target);
 
-            ts.mergeTerms(target, v);
+            int sum = terms.get(target);
+            sum += v.stream()
+                .map(s -> terms.remove(s))
+                .reduce(0, (a, b) -> a + b);
+
+            terms.put(target, sum);
         }
     }
 }

@@ -2,7 +2,6 @@ package edu.unipd.dei.eis.TermsStore;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import edu.unipd.dei.eis.TopTerms;
@@ -34,14 +33,5 @@ public abstract class BaseTermsStore implements TermsStore {
                 .collect(Collectors.toList()));
 
         return new TopTerms(list);
-    }
-
-    public void mergeTerms(String targetTerm, Set<String> otherTerms) {
-        int sum = terms.get(targetTerm);
-
-        for (String t : otherTerms)
-            sum += terms.remove(t);
-
-        terms.put(targetTerm, sum);
     }
 }

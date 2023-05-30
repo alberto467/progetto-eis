@@ -21,8 +21,9 @@ import org.slf4j.Logger;
 public class DownloadCommand extends BaseCommand {
     private static final Logger logger = LoggerFactory.getLogger(DownloadCommand.class);
 
-    @Option(names = {"-s", "--sources"}, required = true,
-        description = "The sources to download from", split = ",")
+    @Option(names = {"-s", "--sources"},
+        description = "A list of sources to download from, separated by a comma. All will use all the available sources (the default). List supported sources with the list-sources command",
+        split = ",")
     private String[] sources = {"all"};
 
     @Option(names = {"-o", "--output"}, defaultValue = "tmp/articles",

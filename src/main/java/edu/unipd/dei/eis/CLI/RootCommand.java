@@ -8,7 +8,8 @@ import picocli.CommandLine.Command;
     subcommands = {
         DownloadCommand.class,
         ExtractCommand.class,
-        DownloadExtractCommand.class
+        DownloadExtractCommand.class,
+        ListSourcesCommand.class
     })
 public class RootCommand extends BaseCommand {
     public void task() throws Exception {

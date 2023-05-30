@@ -6,9 +6,10 @@ import picocli.CommandLine.Option;
 
 @Command(name = "download-extract")
 public class DownloadExtractCommand extends BaseCommand {
-    @Option(names = {"-s", "--sources"}, required = true,
-        defaultValue = "all", description = "The sources to download from")
-    private String[] sources;
+    @Option(names = {"-s", "--sources"},
+        description = "A list of sources to download from, separated by a comma. All will use all the available sources (the default). List supported sources with the list-sources command",
+        split = ",")
+    private String[] sources = {"all"};
 
     @Option(names = {"-n", "--number"},
         description = "The number of articles to download from each source")

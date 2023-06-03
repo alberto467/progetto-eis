@@ -16,7 +16,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 
 import org.junit.jupiter.api.Test;
 
-public class TermsExtractorTest
+class TermsExtractorTest
 {
     private StanfordCoreNLP pipeline;
 

@@ -23,7 +23,10 @@ public class TopTerms {
     }
 
     public void write(File path) throws Exception {
-        path.mkdirs();
+        File parent = path.getParentFile();
+        if (parent != null)
+            parent.mkdirs();
+
         BufferedWriter bw = new BufferedWriter(new FileWriter(path));
 
         getPrintStream().forEachOrdered(s -> {

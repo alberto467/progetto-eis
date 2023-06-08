@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 class DownloadTest extends DownloadCommand
 {
     private String[] sources = {"all"};//Valore di default per la sorgente degli articoli
-    private static final File store = new File("src/test/resources/test_storage/articles");//Path dello storage del test
+    private static final File store = new File("src/test/resources/test_storage/DownloadTest");//Path dello storage del test
     private static final int num = 2;//Numero di articoli da scaricare
 
     @Option(names = {"-s", "--sources"},

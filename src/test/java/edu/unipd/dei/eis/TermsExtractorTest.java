@@ -19,6 +19,10 @@ import org.junit.jupiter.api.Test;
 class TermsExtractorTest
 {
     private StanfordCoreNLP pipeline;
+    private static final File inputFile = new File("src/test/resources/test_source/TermsExtractorTest/input_test.txt");
+    private static final String outputFilePath = "src/test/resources/test_storage/TermsExtractorTest/output_test.txt";
+    private static final File outputFile = new File(outputFilePath);
+    private static final File outputFolder = new File("src/test/resources/test_storage/TermsExtractorTest");
 
     @Test
     void testExtractTerms()
@@ -32,13 +36,9 @@ class TermsExtractorTest
 
         pipeline = new StanfordCoreNLP(props);
 
-        String inputFilePath = "src/test/resources/input_test.txt";
-        String outputFilePath = "src/test/resources/output_test.txt";
-
-        File inputFile = new File(inputFilePath);
         if (!inputFile.exists())
         {
-            throw new IllegalArgumentException("Il file specificato non esiste: " + inputFilePath);
+            throw new IllegalArgumentException("Il file specificato non esiste");
         }
 
         StringBuilder contentBuilder = new StringBuilder();
@@ -78,12 +78,12 @@ class TermsExtractorTest
         String tokensPerSecond = String.format("%.2f", tokenCount / (elapsedMs / 1000.0));
 
         //Controlla l'esistenza del file
-        File outputFile = new File(outputFilePath);
         if (!outputFile.exists())
         {
             try
             {
                 // Crea il file di output
+                outputFolder.mkdirs();
                 outputFile.createNewFile();
             }
             catch (IOException e)

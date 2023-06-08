@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 class ExtractionTest extends ExtractCommand
 {
-    private static final File inputArticles = new File("src/test/resources/test_storage/articles");
-    private static final File outputTerms = new File("src/test/resources/test_storage/terms");
-    private static final File outputResults = new File("src/test/resources/test_storage/results/test4_results.txt");
+    private static final File inputArticles = new File("src/test/resources/test_source/ExtractionTest");
+    private static final File outputTerms = new File("src/test/resources/test_storage/ExtractionTest");
+    private static final File outputResults = new File("src/test/resources/test_storage/ExtractionTest/test_results.txt");
     private Integer threads = null;
 
     @Test

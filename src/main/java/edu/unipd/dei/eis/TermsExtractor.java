@@ -24,7 +24,8 @@ public class TermsExtractor {
     public TermsExtractor() {
         Properties props = new Properties();
         props.setProperty("annotators", "tokenize, pos, lemma, stopword");
-        props.setProperty("tokenize.options", "americanize=false");
+        props.setProperty("tokenize.options",
+            "americanize=false, normalizeParentheses=false, untokenizable=noneDelete");
         props.setProperty("customAnnotatorClass.stopword", "edu.unipd.dei.eis.StopWordAnnotator");
         props.setProperty("stopword.file", "stopwords.txt");
         props.setProperty("ssplit.isOneSentence", "true");
@@ -90,28 +91,7 @@ public class TermsExtractor {
     public Set<String> extractTerms(Article article) {
         logger.trace("Extracting terms from article {}", article.id);
         long startTime = System.currentTimeMillis();
-
-        // List<Annotation> sentences = new Document(article.body).sentences().stream()
-        // .map(s -> new Annotation(s.text())).collect(Collectors.toList());
-
-        // sentences.add(0, new Annotation(article.title));
-
-        // pipeline.annotate(sentences);
-
-        // Set<String> terms = new HashSet<>();
-        // int tokenCount = 0;
-        // for (Annotation sentence : sentences) {
-        // for (CoreLabel token : sentence.get(CoreAnnotations.TokensAnnotation.class)) {
-        // tokenCount++;
-
-        // if (terms.contains(token.lemma()))
-        // continue;
-
-        // if (isValidToken(token))
-        // terms.add(token.lemma());
-        // }
-        // }
-
+        
         CoreDocument document = new CoreDocument(article.title + '\n' + article.body);
 
         pipeline.annotate(document);
@@ -125,7 +105,7 @@ public class TermsExtractor {
                 continue;
 
             if (isValidToken(token))
-                terms.add(token.lemma());
+                terms.add(processWord(token.lemma()));
         }
 
         long elapsedMs = System.currentTimeMillis() - startTime;
@@ -134,5 +114,10 @@ public class TermsExtractor {
             terms.size(), article.id, tokenCount, elapsedMs, tokensPerSecond);
 
         return terms;
+    }
+
+    private static String processWord(String token) {
+        // Rimuove caratteri non ASCII
+        return token.replaceAll("[^\\x00-\\x7F]", "");
     }
 }

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Assertions;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import edu.unipd.dei.eis.TermsStore.FileTermsStore;
@@ -41,10 +40,7 @@ class TopTermsTest {
             }
 
             // seleziona solo i 50 termini con il peso maggiore
-            terms = (articles.getTerms().entrySet().stream()
-                .sorted((a, b) -> a.getKey().compareTo(b.getKey()))
-                .sorted((a, b) -> b.getValue() - a.getValue()).limit(50)
-                .collect(Collectors.toList()));
+            terms = articles.getTopTerms(50).getList();
 
             if (!output.exists()) {
                 // Crea il file di output
@@ -87,10 +83,5 @@ class TopTermsTest {
             terms.stream().map(e -> e.getKey().toString() + " " + e.getValue().toString());
 
         return out;
-    }
-
-    @Override
-    public String toString() {
-        return getPrintStream().reduce("", (a, b) -> a + b + "\n");
     }
 }

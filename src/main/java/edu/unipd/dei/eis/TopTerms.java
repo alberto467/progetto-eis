@@ -15,6 +15,10 @@ public class TopTerms {
         this.terms = terms;
     }
 
+    public List<Map.Entry<String, Integer>> getList() {
+        return terms;
+    }
+
     private Stream<String> getPrintStream() {
         Stream<String> out =
             terms.stream().map(e -> e.getKey().toString() + " " + e.getValue().toString());

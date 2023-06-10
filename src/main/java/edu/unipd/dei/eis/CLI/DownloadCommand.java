@@ -8,6 +8,7 @@ import edu.unipd.dei.eis.ArticleSource.ArticleSource;
 import edu.unipd.dei.eis.ArticleStorage.ArticleFileStore;
 import edu.unipd.dei.eis.ArticleStorage.ArticleStorage;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -53,20 +54,35 @@ public class DownloadCommand extends BaseCommand {
         // ArticleSource source = new GuardianAPI(apiKey);
         ArticleStorage storage = new ArticleFileStore(output);
 
-        Set<String> sourcesSet = new HashSet<String>();
-        for (String source : sources)
-            if (!source.isEmpty())
-                sourcesSet.add(source.toLowerCase());
 
-        boolean all = sourcesSet.size() == 0 || sourcesSet.contains("all");
+        ServiceLoader<ArticleSource> sourcesLoader = ServiceLoader.load(ArticleSource.class);
+        Set<String> supportedSourcesNames = new HashSet<String>();
+        for (ArticleSource source : sourcesLoader) {
+            logger.info("Discovered source {}", source.getName());
+            supportedSourcesNames.add(source.getName().toLowerCase());
+        }
+        if (supportedSourcesNames.isEmpty())
+            throw new RuntimeException("No sources discovered!");
+
+        Set<String> targetSources = new HashSet<String>();
+        for (String source : sources) {
+            String lcSource = source.toLowerCase();
+            if (source == "all" || supportedSourcesNames.contains(lcSource))
+                targetSources.add(lcSource);
+        }
+
+        boolean all = targetSources.contains("all");
+        if (!all && targetSources.isEmpty())
+            throw new RuntimeException(
+                "No valid sources specified with " + Arrays.toString(sources)
+                    + "! Use the list-sources subcommand to see the list of available sources");
 
         logger.info("Downloading {} articles from {}", number,
-            all ? "all" : sourcesSet.toString());
+            all ? "all" : targetSources.toString());
 
-        for (ArticleSource Source : ServiceLoader.load(ArticleSource.class)) {
-            logger.info("Discovered source {}", Source.getName());
-            if (all || sourcesSet.contains(Source.getName().toLowerCase()))
-                DownloadManager.download(Source, storage, number);
+        for (ArticleSource source : sourcesLoader) {
+            if (all || targetSources.contains(source.getName().toLowerCase()))
+                DownloadManager.download(source, storage, number);
         }
     }
 }

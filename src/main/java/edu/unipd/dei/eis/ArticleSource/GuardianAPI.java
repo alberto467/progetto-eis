@@ -7,8 +7,6 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import com.google.gson.Gson;
 import edu.unipd.dei.eis.Article;
 import edu.unipd.dei.eis.URIBuilder;
@@ -17,7 +15,6 @@ import edu.unipd.dei.eis.URIBuilder;
  * Classe che si occupa di fornire gli articoli tramite l'API del Guardian
  */
 public class GuardianAPI {
-    private static final Logger logger = LoggerFactory.getLogger(GuardianAPI.class);
     private URIBuilder uriBuilder;
     private int timeout = 2000;
     private Gson g = new Gson();

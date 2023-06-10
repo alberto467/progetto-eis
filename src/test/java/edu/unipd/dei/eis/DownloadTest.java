@@ -1,25 +1,26 @@
 package edu.unipd.dei.eis;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import java.io.File;
-import picocli.CommandLine.Option;
-
 import edu.unipd.dei.eis.CLI.DownloadCommand;
-
 import org.junit.jupiter.api.Test;
 
-class DownloadTest extends DownloadCommand
-{
-    private String[] sources = {"all"};//Valore di default per la sorgente degli articoli
-    private static final File store = new File("src/test/resources/test_storage/DownloadTest");//Path dello storage del test
-    private static final int num = 2;//Numero di articoli da scaricare
+class DownloadTest {
+    private String[] sources = {"all"}; // Valore di default per la sorgente degli articoli
 
-    @Option(names = {"-s", "--sources"},
-        description = "A list of sources to download from, separated by a comma. All will use all the available sources (the default). List supported sources with the list-sources command",
-        split = ",")
+    // Path dello storage del test
+    private static final File store = new File("src/test/resources/test_storage/DownloadTest");
+
+    private static final int num = 2; // Numero di articoli da scaricare
 
     @Test
-    void testdownload() throws Exception
-    {
-        new DownloadCommand(sources, store, num).task();//Finge un comando download con uno specifico storage e un specifico numero di articoli da scaricare
+    void testDownload() throws Exception {
+        assertDoesNotThrow(() -> {
+            /*
+             * Finge un comando download con uno storage specifico e un specifico numero di articoli
+             * da scaricare
+             */
+            new DownloadCommand(sources, store, num).task();
+        });
     }
 }

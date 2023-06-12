@@ -19,12 +19,12 @@ public class TimesCSVSource implements ArticleSource {
     private String path;
 
     /**
-     * Costruttore
+     * Costruttore di default
      * 
-     * Utilizza il file nytimes_articles_v2.csv
+     * Utilizza il file nytimes_articles_v2.csv nelle risorse
      */
     public TimesCSVSource() {
-        this("nytimes_articles_v2.csv");
+        this.path = getClass().getClassLoader().getResource("nytimes_articles_v2.csv").getPath();
     }
 
     /**

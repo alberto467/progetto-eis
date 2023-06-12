@@ -5,10 +5,9 @@ import edu.unipd.dei.eis.App;
 import edu.unipd.dei.eis.Article;
 
 public class GuardianSource implements ArticleSource {
-    private GuardianAPI api;
+    private GuardianAPI api = null;
 
-
-    public GuardianSource() {
+    private void setupGuardianAPI() {
         String apiKey = App.env.get("GUARDIAN_API_KEY");
         if (apiKey == null || apiKey.isEmpty())
             throw new RuntimeException(
@@ -34,6 +33,10 @@ public class GuardianSource implements ArticleSource {
      * @return La lista di articoli
      */
     public List<Article> getArticles(int num) throws Exception {
+        // Lazily initialize the API to avoid env key errors if the user doesn't utilize this source
+        if (api == null)
+            setupGuardianAPI();
+
         return api.search(
             new GuardianAPI.SearchQueryBuilder()
                 .setQuery("nuclear power")

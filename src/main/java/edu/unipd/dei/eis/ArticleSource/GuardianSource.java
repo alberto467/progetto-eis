@@ -5,8 +5,17 @@ import edu.unipd.dei.eis.App;
 import edu.unipd.dei.eis.Article;
 
 public class GuardianSource implements ArticleSource {
-    private GuardianAPI api = new GuardianAPI(App.env.get("GUARDIAN_API_KEY"));
+    private GuardianAPI api;
 
+
+    public GuardianSource() {
+        String apiKey = App.env.get("GUARDIAN_API_KEY");
+        if (apiKey == null || apiKey.isEmpty())
+            throw new RuntimeException(
+                "Variabile d'ambiente GUARDIAN_API_KEY non impostata. Specificarla nel file .env per poter usare GuardianSource");
+
+        api = new GuardianAPI(apiKey);
+    }
 
     /**
      * Ritorna il nome della fonte

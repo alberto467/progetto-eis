@@ -133,14 +133,13 @@
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.4.1</version>
         <configuration>
+          <transformers>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>edu.unipd.dei.eis.App</mainClass>
+            </transformer>
+          </transformers>
           <shadedArtifactAttached>true</shadedArtifactAttached>
           <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>edu.unipd.dei.eis.App</mainClass>
-            </manifest>
-          </archive>
         </configuration>
         <executions>
           <execution>

@@ -3,6 +3,7 @@ package edu.unipd.dei.eis;
 import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
+import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import org.slf4j.Logger;
@@ -43,6 +44,7 @@ public class ExtractionManager {
             .setUpdateIntervalMillis(250)
             .showSpeed()
             .setUnit(" articles", 1)
+            .setConsumer(new ConsoleProgressBarConsumer(System.out))
             .build()) {
 
             ForkJoinPool pool = new ForkJoinPool(threads);

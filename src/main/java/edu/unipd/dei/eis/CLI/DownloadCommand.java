@@ -47,13 +47,7 @@ public class DownloadCommand extends BaseCommand {
         if (output.exists() && !output.isDirectory())
             throw new RuntimeException("Output path is not a directory");
 
-        String apiKey = App.env.get("GUARDIAN_API_KEY");
-        if (apiKey == null || apiKey.isEmpty())
-            throw new RuntimeException("GUARDIAN_API_KEY environment variable not set");
-
-        // ArticleSource source = new GuardianAPI(apiKey);
         ArticleStorage storage = new ArticleFileStore(output);
-
 
         ServiceLoader<ArticleSource> sourcesLoader = ServiceLoader.load(ArticleSource.class);
         Set<String> supportedSourcesNames = new HashSet<String>();

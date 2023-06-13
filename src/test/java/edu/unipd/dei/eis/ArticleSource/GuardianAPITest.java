@@ -9,7 +9,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 class GuardianAPITest {
     @Test
     void testGetArticles() {
-        Dotenv dotenv = Dotenv.load();
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
 
         String apiKey = dotenv.get("GUARDIAN_API_KEY");
         if (apiKey == null)

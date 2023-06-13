@@ -9,6 +9,9 @@ public class GuardianSource implements ArticleSource {
 
     private void setupGuardianAPI() {
         String apiKey = App.env.get("GUARDIAN_API_KEY");
+        if (apiKey == null)
+            apiKey = System.getenv("GUARDIAN_API_KEY");
+
         if (apiKey == null || apiKey.isEmpty())
             throw new RuntimeException(
                 "Variabile d'ambiente GUARDIAN_API_KEY non impostata. Specificarla nel file .env per poter usare GuardianSource");

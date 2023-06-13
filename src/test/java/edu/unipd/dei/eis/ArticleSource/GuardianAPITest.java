@@ -12,6 +12,8 @@ class GuardianAPITest {
         Dotenv dotenv = Dotenv.load();
 
         String apiKey = dotenv.get("GUARDIAN_API_KEY");
+        if (apiKey == null)
+            apiKey = System.getenv("GUARDIAN_API_KEY");
 
         GuardianAPI gApi = new GuardianAPI(apiKey);
 

@@ -32,7 +32,6 @@ class TermsExtractorTest {
         props.setProperty("annotators", "tokenize, pos, lemma, stopword");
         props.setProperty("tokenize.options", "americanize=false");
         props.setProperty("customAnnotatorClass.stopword", "edu.unipd.dei.eis.StopWordAnnotator");
-        props.setProperty("stopword.file", "stopwords.txt");
         props.setProperty("ssplit.isOneSentence", "true");
 
         pipeline = new StanfordCoreNLP(props);

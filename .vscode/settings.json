@@ -14,7 +14,8 @@
     "stopwords",
     "Treebank",
     "truecase",
-    "unipd"
+    "unipd",
+    "untokenizable"
   ],
   "cSpell.language": "en,it",
   "cSpell.ignorePaths": [

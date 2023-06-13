@@ -27,7 +27,6 @@ public class TermsExtractor {
         props.setProperty("tokenize.options",
             "americanize=false, normalizeParentheses=false, untokenizable=noneDelete");
         props.setProperty("customAnnotatorClass.stopword", "edu.unipd.dei.eis.StopWordAnnotator");
-        props.setProperty("stopword.file", "stopwords.txt");
         props.setProperty("ssplit.isOneSentence", "true");
 
         // NOTE: CoreNLP's truecase annotator causes consistent crashes, probably on loading the
@@ -91,7 +90,7 @@ public class TermsExtractor {
     public Set<String> extractTerms(Article article) {
         logger.trace("Extracting terms from article {}", article.id);
         long startTime = System.currentTimeMillis();
-        
+
         CoreDocument document = new CoreDocument(article.title + '\n' + article.body);
 
         pipeline.annotate(document);

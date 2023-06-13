@@ -2,6 +2,7 @@ package edu.unipd.dei.eis;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -29,16 +30,22 @@ public class StopWordAnnotator implements Annotator, CoreAnnotation<Boolean> {
 
     StopWordAnnotator(String name, Properties props) throws FileNotFoundException {
         String filename = props.getProperty("stopword.file");
-        if (filename == null)
-            throw new RuntimeException("Missing property stopword.file");
 
         parseFile(filename);
     }
 
     private void parseFile(String filename) throws FileNotFoundException {
-        // Read from file
-        File file = new File(filename);
-        Scanner reader = new Scanner(file);
+        Scanner reader;
+
+        // Read from file if it is specified, otherwise read from the default file in the resources
+        if (filename != null && !filename.isEmpty()) {
+            File file = new File(filename);
+            reader = new Scanner(file);
+        }
+        else {
+            InputStream is = getClass().getResourceAsStream("/stopwords.txt");
+            reader = new Scanner(is);
+        }
 
         stopWords = new HashSet<>();
         while (reader.hasNextLine())
@@ -64,7 +71,7 @@ public class StopWordAnnotator implements Annotator, CoreAnnotation<Boolean> {
     @SuppressWarnings("rawtypes")
     public Set<Class<? extends CoreAnnotation>> requires() {
         return Collections.unmodifiableSet(new ArraySet<>(Arrays.asList(
-                CoreAnnotations.TokensAnnotation.class, CoreAnnotations.LemmaAnnotation.class)));
+            CoreAnnotations.TokensAnnotation.class, CoreAnnotations.LemmaAnnotation.class)));
     }
 
     @Override

@@ -157,6 +157,10 @@
                   <resource></resource>
                   <file>nytimes_articles_v2.csv</file>
                 </transformer>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                  <resource></resource>
+                  <file>stopwords.txt</file>
+                </transformer>
               </transformers>
               <filters>
                 <filter>

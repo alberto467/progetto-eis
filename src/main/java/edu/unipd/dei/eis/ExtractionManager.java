@@ -1,7 +1,9 @@
 package edu.unipd.dei.eis;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ForkJoinPool;
+import java.util.stream.Collectors;
 import edu.unipd.dei.eis.TermsStore.TermsStore;
 import me.tongfei.progressbar.ConsoleProgressBarConsumer;
 import me.tongfei.progressbar.ProgressBar;
@@ -38,6 +40,8 @@ public class ExtractionManager {
 
         logger.info("Processing {} articles...", articles.size());
 
+        List<Set<String>> termsSets = null;
+
         try (ProgressBar pb = new ProgressBarBuilder()
             .setTaskName("Processing articles")
             .setInitialMax(articles.size())
@@ -49,10 +53,11 @@ public class ExtractionManager {
 
             ForkJoinPool pool = new ForkJoinPool(threads);
             try {
-                pool.submit(() -> articles.parallelStream().forEach(a -> {
-                    ts.registerArticleTerms(te.extractTerms(a));
+                termsSets = pool.submit(() -> articles.parallelStream().map(a -> {
+                    Set<String> terms = te.extractTerms(a);
                     pb.step();
-                })).get();
+                    return terms;
+                })).get().collect(Collectors.toList());
             } finally {
                 pool.shutdown();
                 if (!pool.awaitTermination(5, java.util.concurrent.TimeUnit.SECONDS)) {
@@ -62,9 +67,10 @@ public class ExtractionManager {
             }
         }
 
+        TrueCaseHeuristic.processCase(termsSets);
+        termsSets.forEach(ts::registerArticleTerms);
+
         logger.info("Processed {} articles in {} ms", articles.size(),
             System.currentTimeMillis() - startTime);
-
-        new TrueCaseHeuristic(ts.getTerms()).processCase();
     }
 }

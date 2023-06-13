@@ -1,29 +1,25 @@
 package edu.unipd.dei.eis;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.io.File;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
-import edu.unipd.dei.eis.TermsStore.FileTermsStore;
-import edu.unipd.dei.eis.TermsStore.TermsStore;
 
 class TrueCaseHeuristicTest {
     @Test
     void testProcessCase() {
-        TermsStore ts = new FileTermsStore(new File("tmp/test"));
+        List<Set<String>> termsSets = Arrays.asList(
+            new HashSet<>(Arrays.asList("test", "Ciao", "Mario")),
+            new HashSet<>(Arrays.asList("test", "ciao", "Mario")));
 
-        ts.registerArticleTerms(Arrays.asList("test", "Ciao", "Mario"));
-        ts.registerArticleTerms(Arrays.asList("test", "ciao", "Mario"));
+        TrueCaseHeuristic.processCase(termsSets);
 
-        new TrueCaseHeuristic(ts.getTerms()).processCase();
+        List<Set<String>> expected = Arrays.asList(
+            new HashSet<>(Arrays.asList("test", "ciao", "Mario")),
+            new HashSet<>(Arrays.asList("test", "ciao", "Mario")));
 
-        Map<String, Integer> out = new HashMap<>();
-        out.put("test", 2);
-        out.put("ciao", 2);
-        out.put("Mario", 2);
-
-        assertEquals(out, ts.getTerms());
+        assertEquals(expected, termsSets);
     }
 }

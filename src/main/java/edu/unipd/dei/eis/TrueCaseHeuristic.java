@@ -1,7 +1,10 @@
 package edu.unipd.dei.eis;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -10,50 +13,69 @@ import java.util.TreeSet;
  * duplicate terms.
  */
 public class TrueCaseHeuristic {
-    private Map<String, Integer> terms;
 
     /**
      * Constructor
      */
-    public TrueCaseHeuristic(Map<String, Integer> terms) {
-        this.terms = terms;
-    }
+    public TrueCaseHeuristic() {}
 
-    private Map<String, SortedSet<String>> buildCaseMap() {
+    static private Map<String, String> buildCaseMap(List<Set<String>> termsSets) {
         // Map of lower-case version of terms to set of all differently-cased versions of the term
-        Map<String, SortedSet<String>> caseMap = new HashMap<>();
+        Map<String, SortedSet<String>> caseSets = new HashMap<>();
 
-        for (String t : terms.keySet()) {
-            String lower = t.toLowerCase();
-            if (caseMap.containsKey(lower)) {
-                caseMap.get(lower).add(t);
-            } else {
-                SortedSet<String> nSet = new TreeSet<>();
-                nSet.add(t);
-                caseMap.put(lower, nSet);
+        for (Set<String> terms : termsSets)
+            for (String term : terms) {
+                String lower = term.toLowerCase();
+
+                SortedSet<String> s = caseSets.get(lower);
+
+                if (s == null) {
+                    s = new TreeSet<>();
+                    caseSets.put(lower, s);
+                }
+
+                s.add(term);
             }
+
+        Map<String, String> caseMap = new HashMap<>();
+
+        for (Map.Entry<String, SortedSet<String>> e : caseSets.entrySet()) {
+            if (e.getValue().last().equals(e.getKey()))
+                continue;
+
+            caseMap.put(e.getKey(), e.getValue().last());
         }
 
         return caseMap;
     }
 
-    void processCase() {
-        for (SortedSet<String> v : buildCaseMap().values()) {
-            // If we have a single capitalized version of the token, we cannot make any inference
-            // about it's true case.
-            if (v.size() <= 1)
-                continue;
+    static void processCase(List<Set<String>> termsSets) {
+        Map<String, String> caseMap = buildCaseMap(termsSets);
 
-            // Choose lowest string out of set (one with most lower-case letters)
-            String target = v.last();
-            v.remove(target);
+        termsSets.forEach(terms -> {
+            List<String> toRemove = new ArrayList<>();
+            List<String> toAdd = new ArrayList<>();
 
-            int sum = terms.get(target);
-            sum += v.stream()
-                .map(s -> terms.remove(s))
-                .reduce(0, (a, b) -> a + b);
+            for (String term : terms) {
+                String lc = term.toLowerCase();
+                if (term == lc)
+                    continue;
 
-            terms.put(target, sum);
-        }
+                String corrected = caseMap.get(lc);
+
+                if (term == corrected)
+                    continue;
+
+                toRemove.add(term);
+
+                if (corrected == null)
+                    toAdd.add(term.toLowerCase());
+                else
+                    toAdd.add(corrected);
+            }
+
+            toRemove.forEach(terms::remove);
+            terms.addAll(toAdd);
+        });
     }
 }
